@@ -1,8 +1,7 @@
-recursive-include EffectorP3/data/**
-recursive-include *.md
-recursive-include *.txt
-recursive-include *.jar
-recursive-include *.fasta
-recursive-include *.arff
-recursive-include *.txt
-recursive-include *.model
+recursive-include EffectorP3/data *.md
+recursive-include EffectorP3/data *.txt
+recursive-include EffectorP3/data *.jar
+recursive-include EffectorP3/data *.fasta
+recursive-include EffectorP3/data *.arff
+recursive-include EffectorP3/data *.txt
+recursive-include EffectorP3/data *.model

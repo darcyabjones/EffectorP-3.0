@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-    EffectorP 3.0: prediction of apoplastic and cytoplasmic effectors in fungi and oomycetes 
-    Copyright (C) 2021-2022 Jana Sperschneider  
-    This program is free software; you can redistribute it and/or modify  
-    it under the terms of the GNU General Public License as published by  
-    the Free Software Foundation; either version 3 of the License, or     
+    EffectorP 3.0: prediction of apoplastic and cytoplasmic effectors in fungi and oomycetes
+    Copyright (C) 2021-2022 Jana Sperschneider
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 3 of the License, or
     (at your option) any later version.
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -20,6 +20,7 @@ import sys
 import subprocess
 import io
 import getopt
+from pkg_resources import resource_filename
 # -----------------------------------------------------------------------------------------------------------
 # Global variables
 # -----------------------------------------------------------------------------------------------------------
@@ -62,7 +63,10 @@ ARFF_HEADER = '''@RELATION effectors
 @DATA
 '''
 # -----------------------------------------------------------------------------------------------------------
-SCRIPT_PATH = sys.path[0]
+#SCRIPT_PATH = sys.path[0]
+# Empty string is just because resource filename expects to add the filename
+# itself, but we're adding the path separately
+SCRIPT_PATH = resource_filename("EffectorP3.data", "")
 
 models_bayes_cytoplasmic_fungionly = [SCRIPT_PATH + '/TrainingData_CytoplasmicFungiOnly_Mycorrhizal_Bayes//trainingdata_iteration85_ratio3.model',
 SCRIPT_PATH + '/TrainingData_CytoplasmicFungiOnly_Mycorrhizal_Bayes//trainingdata_iteration75_ratio3.model',
@@ -163,77 +167,77 @@ SCRIPT_PATH + '/TrainingData_Apoplastic_Saprophytes_J48//trainingdata_iteration7
 # Hydrophobicity (Fauchere and Pliska, 1983)
 HYDRO_DIC = {
 'R': -1.01,
-'K': -0.99,  
-'D': -0.77,  
-'E': -0.64,  
+'K': -0.99,
+'D': -0.77,
+'E': -0.64,
 'N': -0.6,
-'Q': -0.22,  
-'S': -0.04,  
-'G': -0.0,  
-'H': 0.13,  
-'T': 0.26,  
-'A': 0.31, 
-'P': 0.72,  
-'Y': 0.96,  
+'Q': -0.22,
+'S': -0.04,
+'G': -0.0,
+'H': 0.13,
+'T': 0.26,
+'A': 0.31,
+'P': 0.72,
+'Y': 0.96,
 'V': 1.22,
-'C': 1.54,  
-'L': 1.7,  
-'F': 1.79,  
-'I': 1.8,  
-'M': 1.23 ,  
+'C': 1.54,
+'L': 1.7,
+'F': 1.79,
+'I': 1.8,
+'M': 1.23 ,
 'W': 2.25}
 
 # Taken from http://www.cprofiler.org/help.html
 # Surface exposure (Janin, 1979), these are free energy values
 EXPOSED_DIC = {
-'A': 0.3, 
+'A': 0.3,
 'R': -1.4,
 'N': -0.5,
-'D': -0.6,  
-'C': 0.9,  
-'Q': -0.7,  
-'E': -0.7,  
-'G': 0.3,  
-'H': -0.1,  
-'I': 0.7,  
-'L': 0.5,  
-'K': -1.8,  
-'M': 0.4,  
-'F': 0.5,  
-'P': -0.3,  
-'S': -0.1,  
-'T': -0.2,  
-'W': 0.3,  
-'Y': -0.4,  
+'D': -0.6,
+'C': 0.9,
+'Q': -0.7,
+'E': -0.7,
+'G': 0.3,
+'H': -0.1,
+'I': 0.7,
+'L': 0.5,
+'K': -1.8,
+'M': 0.4,
+'F': 0.5,
+'P': -0.3,
+'S': -0.1,
+'T': -0.2,
+'W': 0.3,
+'Y': -0.4,
 'V': 0.6}
 
 # Flexibility (Vihinen et al., 1994)
 FLEX_DIC = {
-'A': 0.984, 
+'A': 0.984,
 'R': 1.008,
 'N': 1.048,
-'D': 1.068,  
-'C': 0.906,  
-'Q': 1.037,  
-'E': 1.094,  
-'G': 1.031,  
-'H': 0.950,  
-'I': 0.927,  
-'L': 0.935,  
-'K': 1.102,  
-'M': 0.952,  
-'F': 0.915,  
-'P': 1.049,  
-'S': 1.046,  
-'T': 0.997,  
-'W': 0.904,  
-'Y': 0.929,  
+'D': 1.068,
+'C': 0.906,
+'Q': 1.037,
+'E': 1.094,
+'G': 1.031,
+'H': 0.950,
+'I': 0.927,
+'L': 0.935,
+'K': 1.102,
+'M': 0.952,
+'F': 0.915,
+'P': 1.049,
+'S': 1.046,
+'T': 0.997,
+'W': 0.904,
+'Y': 0.929,
 'V': 0.931}
 
 # Alpha helix frequency (Nagano, 1973)
 ALPHA_DIC = {
-'Y': 0.63,  
-'P': 0.70,  
+'Y': 0.63,
+'P': 0.70,
 'G': 0.72,
 'N': 0.77,
 'S': 0.78,
@@ -255,8 +259,8 @@ ALPHA_DIC = {
 
 # Beta structure frequency (Nagano, 1973)
 BETA_DIC = {
-'Y': 1.07,  
-'P': 0.75,  
+'Y': 1.07,
+'P': 0.75,
 'G': 0.9,
 'N': 0.72,
 'S': 0.77,
@@ -280,29 +284,29 @@ BETA_DIC = {
 COIL_DIC = {
     'F' : 0.58,
     'M' : 0.62,
-    'L' : 0.63,  
+    'L' : 0.63,
     'A' : 0.72,
     'E' : 0.75,
     'H' : 0.76,
-    'I' : 0.8,  
-    'Q' : 0.81,  
-    'V' : 0.83,  
-    'K' : 0.84,  
-    'W' : 0.87,  
-    'C' : 1.01,  
-    'T' : 1.03,  
+    'I' : 0.8,
+    'Q' : 0.81,
+    'V' : 0.83,
+    'K' : 0.84,
+    'W' : 0.87,
+    'C' : 1.01,
+    'T' : 1.03,
     'D' : 1.04,
-    'R' : 1.33,  
-    'S' : 1.34, 
-    'G' : 1.35,  
-    'Y' : 1.35,  
-    'N' : 1.38,  
+    'R' : 1.33,
+    'S' : 1.34,
+    'G' : 1.35,
+    'Y' : 1.35,
+    'N' : 1.38,
     'P' : 1.43}
 
 # Polarity (Zimmerman et al., 1968)
 POLARITY_DIC = {
-'Y': 1.61,  
-'P': 1.58,  
+'Y': 1.61,
+'P': 1.58,
 'G': 0.0,
 'N': 3.38,
 'S': 1.67,
@@ -348,25 +352,25 @@ DISORDER_DIC = {
 # Bulkiness (Zimmerman et al., 1968)
 BULKY_DIC = {
 'G' : 3.4,
-'S' : 9.47, 
-'A' : 11.5,     
-'D' : 11.68,    
-'N' : 12.82,    
-'C' : 13.46,    
-'E' : 13.57,    
-'H' : 13.69,    
+'S' : 9.47,
+'A' : 11.5,
+'D' : 11.68,
+'N' : 12.82,
+'C' : 13.46,
+'E' : 13.57,
+'H' : 13.69,
 'R' : 14.28,
-'Q' : 14.45,    
-'K' : 15.71,    
+'Q' : 14.45,
+'K' : 15.71,
 'T' : 15.77,
-'M' : 16.25,    
+'M' : 16.25,
 'P' : 17.43,
-'Y' : 18.03,    
-'F' : 19.8, 
+'Y' : 18.03,
+'F' : 19.8,
 'I' : 21.4,
-'L' : 21.4,     
-'V' : 21.57,    
-'W' : 21.67}                                                  
+'L' : 21.4,
+'V' : 21.57,
+'W' : 21.67}
 
 # Charged amino acids, 1 are positively charged residues (K, R); -1 are negatively charged residues (D, E)
 CHARGE_DIC = {
@@ -424,7 +428,7 @@ MOLECULAR_WEIGHT_DIC = {
 'W': 186.2132,
 'X': 118.8860,
 'Y': 163.1760,
-'Z': 128.6231}    
+'Z': 128.6231}
 # -----------------------------------------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------------------------------------
@@ -432,11 +436,11 @@ MOLECULAR_WEIGHT_DIC = {
 # -----------------------------------------------------------------------------------------------------------
 def usage():
     """ Function: usage()
-        Purpose:  Print helpful information for the user.        
-        
+        Purpose:  Print helpful information for the user.
+
         Input:    None.
-    
-        Return:   Print options for running EffectorP 3.0.       
+
+        Return:   Print options for running EffectorP 3.0.
     """
     print('''
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -450,30 +454,30 @@ def usage():
     print("python EffectorP.py [-options] -i <input_file>")
     print()
     print("where basic options are:")
-    print("-f : run in fungal mode")    
+    print("-f : run in fungal mode")
     print("-h : show brief help on version and usage")
     print()
     print("options directing output:")
     print("-o <f> : direct tab-delimited output table with predictions to file <f>, not stdout")
-    print("-E <f> : save predicted effectors to FASTA file <f>")   
-    print("-N <f> : save predicted non-effectors to FASTA file <f>") 
+    print("-E <f> : save predicted effectors to FASTA file <f>")
+    print("-N <f> : save predicted non-effectors to FASTA file <f>")
     print()
     print("# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -")
     print()
-    sys.exit()    
+    sys.exit()
 
     return
 # -----------------------------------------------------------------------------------------------------------
 def scan_arguments(commandline):
     """ Function: scan_arguments()
-        Purpose:  Scan the input options given to the EffectorP program.        
-        
+        Purpose:  Scan the input options given to the EffectorP program.
+
         Input:    Input options given by the user.
-    
+
         Return:   Parsed options.
     """
     try:
-        opts, args = getopt.getopt(commandline, "hfso:E:N:i:", ["help"])        
+        opts, args = getopt.getopt(commandline, "hfso:E:N:i:", ["help"])
     except getopt.GetoptError as err:
         # print help information and exit:
         print(str(err)) # will print something like "option -a not recognized"
@@ -487,13 +491,13 @@ def scan_arguments(commandline):
     FUNGAL_MODE = False
 
     i_count, o_count, E_count, N_count, P_count = 0, 0, 0, 0, 0
-   
+
     for opt, arg in opts:
         if opt in ("-o"):
             output_file = arg
             o_count += 1
         elif opt in ("-f"):
-            FUNGAL_MODE = True            
+            FUNGAL_MODE = True
         elif opt in ("-i"):
             FASTA_FILE = arg
             i_count += 1
@@ -542,7 +546,7 @@ def get_effector_predictions(ORIGINAL_IDENTIFIERS, SEQUENCES, EFFECTOR_THRESHOLD
 
     for index, (ident, seq) in enumerate(zip(ORIGINAL_IDENTIFIERS, SEQUENCES)):
 
-        # Be careful to use this short identifier later, 
+        # Be careful to use this short identifier later,
         # if all identifiers are equal, predictions will fail if not used
         short_ident = 'protein' + str(index)
         yes_prob_cytoplasmic, no_prob_cytoplasmic = [], []
@@ -552,27 +556,27 @@ def get_effector_predictions(ORIGINAL_IDENTIFIERS, SEQUENCES, EFFECTOR_THRESHOLD
 
             if vote == 'Non-effector':
                 no_prob_cytoplasmic.append(prob)
-                yes_prob_cytoplasmic.append(1.0 - prob)                        
+                yes_prob_cytoplasmic.append(1.0 - prob)
 
             if vote == 'Effector':
                 yes_prob_cytoplasmic.append(prob)
-                no_prob_cytoplasmic.append(1.0 - prob)        
+                no_prob_cytoplasmic.append(1.0 - prob)
 
         for vote, prob in ensembl_votes_apoplastic[short_ident]:
 
             if vote == 'Non-effector':
                 no_prob_apoplastic.append(prob)
-                yes_prob_apoplastic.append(1.0 - prob)                        
+                yes_prob_apoplastic.append(1.0 - prob)
 
             if vote == 'Effector':
                 yes_prob_apoplastic.append(prob)
-                no_prob_apoplastic.append(1.0 - prob) 
+                no_prob_apoplastic.append(1.0 - prob)
 
         # Soft voting: argmax of the sum of predicted probabilities
         yes_prob_cytoplasmic = round(sum(yes_prob_cytoplasmic)/float(len(models_cytoplasmic)),3)
         no_prob_cytoplasmic = round(sum(no_prob_cytoplasmic)/float(len(models_cytoplasmic)),3)
         yes_prob_apoplastic = round(sum(yes_prob_apoplastic)/float(len(models_apoplastic)),3)
-        no_prob_apoplastic = round(sum(no_prob_apoplastic)/float(len(models_apoplastic)),3)     
+        no_prob_apoplastic = round(sum(no_prob_apoplastic)/float(len(models_apoplastic)),3)
 
         cytoplasmic_prediction = False
         apoplastic_prediction = False
@@ -584,38 +588,38 @@ def get_effector_predictions(ORIGINAL_IDENTIFIERS, SEQUENCES, EFFECTOR_THRESHOLD
                 if yes_prob_apoplastic >= EFFECTOR_THRESHOLD:
                     prediction = 'Cytoplasmic effector (apoplastic effector: ' + str(yes_prob_apoplastic) + ')'
                     prob = yes_prob_cytoplasmic
-                    predicted_effectors.append((ident.strip(), yes_prob_cytoplasmic, yes_prob_apoplastic, seq))            
-                    cyto_apo_effectors[short_ident] = [yes_prob_cytoplasmic, yes_prob_apoplastic, seq]    
+                    predicted_effectors.append((ident.strip(), yes_prob_cytoplasmic, yes_prob_apoplastic, seq))
+                    cyto_apo_effectors[short_ident] = [yes_prob_cytoplasmic, yes_prob_apoplastic, seq]
                 else:
                     prediction = 'Cytoplasmic effector'
                     prob = yes_prob_cytoplasmic
-                    predicted_effectors.append((ident.strip(), yes_prob_cytoplasmic, yes_prob_apoplastic, seq))   
-                    cyto_effectors[short_ident] = [yes_prob_cytoplasmic, seq]              
+                    predicted_effectors.append((ident.strip(), yes_prob_cytoplasmic, yes_prob_apoplastic, seq))
+                    cyto_effectors[short_ident] = [yes_prob_cytoplasmic, seq]
 
-            # Is it more likely an apoplastic effector                
+            # Is it more likely an apoplastic effector
             if yes_prob_apoplastic > yes_prob_cytoplasmic:
 
                 if yes_prob_cytoplasmic >= EFFECTOR_THRESHOLD:
                     prediction = 'Apoplastic effector (cytoplasmic effector: ' + str(yes_prob_cytoplasmic) + ')'
                     prob = yes_prob_apoplastic
-                    predicted_effectors.append((ident.strip(), yes_prob_cytoplasmic, yes_prob_apoplastic, seq))     
-                    apo_cyto_effectors[short_ident] = [yes_prob_apoplastic, yes_prob_cytoplasmic, seq]     
+                    predicted_effectors.append((ident.strip(), yes_prob_cytoplasmic, yes_prob_apoplastic, seq))
+                    apo_cyto_effectors[short_ident] = [yes_prob_apoplastic, yes_prob_cytoplasmic, seq]
 
                 else:
                     prediction = 'Apoplastic effector'
                     prob = yes_prob_apoplastic
-                    predicted_effectors.append((ident.strip(), yes_prob_cytoplasmic, yes_prob_apoplastic, seq))   
-                    apo_effectors[short_ident] = [yes_prob_apoplastic, seq]                                  
+                    predicted_effectors.append((ident.strip(), yes_prob_cytoplasmic, yes_prob_apoplastic, seq))
+                    apo_effectors[short_ident] = [yes_prob_apoplastic, seq]
 
         if yes_prob_cytoplasmic < EFFECTOR_THRESHOLD and yes_prob_apoplastic < EFFECTOR_THRESHOLD:
             prediction = 'Non-effector'
             prob = round(min(no_prob_cytoplasmic, no_prob_apoplastic),3)
             predicted_noneffectors.append((ident.strip(), prob, seq))
 
-        ensemble_predictions.append((ident.strip(), prediction, prob, seq))     
+        ensemble_predictions.append((ident.strip(), prediction, prob, seq))
 
     return ensemble_predictions, predicted_effectors, predicted_noneffectors, cyto_effectors, apo_effectors, cyto_apo_effectors, apo_cyto_effectors
-# -----------------------------------------------------------------------------------------------------------    
+# -----------------------------------------------------------------------------------------------------------
 def get_model_predictions(WEKA_PATH, RESULTS_PATH, MODELS, CLASSIFIER, ensembl_votes, ORIGINAL_IDENTIFIERS, SEQUENCES):
 
     for model in MODELS:
@@ -638,32 +642,32 @@ def get_model_predictions(WEKA_PATH, RESULTS_PATH, MODELS, CLASSIFIER, ensembl_v
                 e = sys.exc_info()[1]
                 print("Error calling WEKA: %s" % e)
                 sys.exit(1)
-        #-------------------------------------------------------------- 
+        #--------------------------------------------------------------
         # Parse the WEKA output file
         file_input = RESULTS_PATH + 'Predictions.txt'
         predicted_effectors, predicted_noneffectors, predictions = parse_weka_output(file_input, ORIGINAL_IDENTIFIERS, SEQUENCES)
-        
+
         for index, (ident, prediction, prob, seq) in enumerate(predictions):
 
             short_ident = 'protein' + str(index)
 
             if short_ident in ensembl_votes:
-                previous_predictions = ensembl_votes[short_ident] 
+                previous_predictions = ensembl_votes[short_ident]
                 ensembl_votes[short_ident] = previous_predictions + [(prediction, prob)]
             else:
                 ensembl_votes[short_ident] = [(prediction, prob)]
 
     return ensembl_votes
-# -----------------------------------------------------------------------------------------------------------        
+# -----------------------------------------------------------------------------------------------------------
 def write_weka_input(weka_input, SHORT_IDENTIFIERS, SEQUENCES):
     """ Function: write_weka_input()
-        Purpose:  Given the query identifiers and 
-                  protein features, write the input arff file for WEKA. 
-              
-        Input:    WEKA arff file name, query identifiers.                  
-    
-        Return:   None. 
-    """   
+        Purpose:  Given the query identifiers and
+                  protein features, write the input arff file for WEKA.
+
+        Input:    WEKA arff file name, query identifiers.
+
+        Return:   None.
+    """
     with open(weka_input, 'w') as f:
         # Create a list of features for each protein
         X = [[] for __ in range(len(SHORT_IDENTIFIERS))]
@@ -702,7 +706,7 @@ def write_weka_input(weka_input, SHORT_IDENTIFIERS, SEQUENCES):
             molecular_weight = MOLECULAR_WEIGHT(sequence)
             percent_positively_charged, percent_negatively_charged, charge = CHARGE(sequence)
             exposed = EXPOSED(sequence)
-            hydrophobicity = HYDROPHOBICITY(sequence)          
+            hydrophobicity = HYDROPHOBICITY(sequence)
             polarity = POLARITY(sequence)
             flexibility = FLEX(sequence)
             aromatic = 100.0*(sequence.count('F') + sequence.count('H') + sequence.count('W') + sequence.count('Y'))/length
@@ -713,7 +717,7 @@ def write_weka_input(weka_input, SHORT_IDENTIFIERS, SEQUENCES):
             beta = BETA(sequence)
             coil = COIL(sequence)
 
-            X[protein_position] = amino_acid_frequencies + [molecular_weight, percent_positively_charged, percent_negatively_charged, exposed] 
+            X[protein_position] = amino_acid_frequencies + [molecular_weight, percent_positively_charged, percent_negatively_charged, exposed]
             X[protein_position] += [hydrophobicity, polarity, flexibility] + [aromatic, polar, disorder, bulky] + [alpha, beta, coil]
 
         # Write protein feature data to WEKA arff file
@@ -733,7 +737,7 @@ def MOLECULAR_WEIGHT(sequence):
         if aa.upper() in MOLECULAR_WEIGHT_DIC:
             molecular_weight += MOLECULAR_WEIGHT_DIC[aa.upper()]
 
-    return molecular_weight        
+    return molecular_weight
 # -----------------------------------------------------------------------------------------------------------
 def HYDROPHOBICITY(sequence):
 
@@ -743,16 +747,16 @@ def HYDROPHOBICITY(sequence):
         if aa.upper() in HYDRO_DIC:
             hydrophobicity += HYDRO_DIC[aa.upper()]
 
-    return hydrophobicity/len(sequence)    
+    return hydrophobicity/len(sequence)
 # -----------------------------------------------------------------------------------------------------------
 def FLEX(sequence):
-    
+
     flexibility = 0.0
     for aa in sequence:
         if aa.upper() in FLEX_DIC:
             flexibility += FLEX_DIC[aa.upper()]
 
-    return flexibility/len(sequence)    
+    return flexibility/len(sequence)
 # -----------------------------------------------------------------------------------------------------------
 def CHARGE(sequence):
 
@@ -782,7 +786,7 @@ def POLARITY(sequence):
     return polarity/len(sequence)
 # -----------------------------------------------------------------------------------------------------------
 def DISORDER(sequence):
-    
+
     disorder = 0.0
     for aa in sequence:
         if aa.upper() in DISORDER_DIC:
@@ -791,7 +795,7 @@ def DISORDER(sequence):
     return disorder/len(sequence)
 # -----------------------------------------------------------------------------------------------------------
 def EXPOSED(sequence):
-    
+
     exposed = 0.0
     for aa in sequence:
         if aa.upper() in EXPOSED_DIC:
@@ -809,7 +813,7 @@ def ALPHA(sequence):
     return alpha/len(sequence)
 # -----------------------------------------------------------------------------------------------------------
 def BETA(sequence):
-    
+
     beta = 0.0
     for aa in sequence:
         if aa.upper() in BETA_DIC:
@@ -818,16 +822,16 @@ def BETA(sequence):
     return beta/len(sequence)
 # -----------------------------------------------------------------------------------------------------------
 def COIL(sequence):
-    
+
     coil = 0.0
     for aa in sequence:
         if aa.upper() in COIL_DIC:
             coil += COIL_DIC[aa.upper()]
 
-    return coil/len(sequence)    
+    return coil/len(sequence)
 # -----------------------------------------------------------------------------------------------------------
 def BULKY(sequence):
-    
+
     bulky = 0.0
     for aa in sequence:
         if aa.upper() in BULKY_DIC:
@@ -837,15 +841,15 @@ def BULKY(sequence):
 # -----------------------------------------------------------------------------------------------------------
 def write_FASTA_short_ids(f_output, ORIGINAL_IDENTIFIERS, ORIGINAL_SEQUENCES):
     """ Function: write_FASTA_short_ids()
-        Purpose:  Given a list of identifiers and the corresponding list 
+        Purpose:  Given a list of identifiers and the corresponding list
                   of sequence, write these to a FASTA file using short
-                  identifiers such as protein1, protein2, .... This is 
-                  done because some programs like pepstats do not like 
+                  identifiers such as protein1, protein2, .... This is
+                  done because some programs like pepstats do not like
                   long identifier names as input.
-              
-        Input:    Path to desired FASTA format output file, list of 
+
+        Input:    Path to desired FASTA format output file, list of
                   identifiers and list of corresponding sequences.
-    
+
         Return:   List of short identifiers.
     """
 
@@ -854,7 +858,7 @@ def write_FASTA_short_ids(f_output, ORIGINAL_IDENTIFIERS, ORIGINAL_SEQUENCES):
         # Change identifiers to protein1, protein2, ...
         # and write to temporary file
         SET = zip(ORIGINAL_IDENTIFIERS, ORIGINAL_SEQUENCES)
-    
+
         for index,  (identifier, sequence) in enumerate(SET):
             short_id = '>protein' + str(index)
             SHORT_IDENTIFIERS.append(short_id)
@@ -865,14 +869,14 @@ def write_FASTA_short_ids(f_output, ORIGINAL_IDENTIFIERS, ORIGINAL_SEQUENCES):
 # -----------------------------------------------------------------------------------------------------------
 def parse_weka_output(file_input, ORIGINAL_IDENTIFIERS, SEQUENCES):
     """ Function: parse_weka_output()
-        Purpose:  Given the WEKA output file and the query identifiers and sequences, 
-                  parse the predicted class for each protein from the WEKA output. 
+        Purpose:  Given the WEKA output file and the query identifiers and sequences,
+                  parse the predicted class for each protein from the WEKA output.
                   Write the predicted effectors to a FASTA file.
-              
-        Input:    WEKA output file and the query identifiers and sequences.                  
-    
-        Return:   The set of predicted effectors only as well as all predictions. 
-    """    
+
+        Input:    WEKA output file and the query identifiers and sequences.
+
+        Return:   The set of predicted effectors only as well as all predictions.
+    """
     predicted_effectors, predicted_noneffectors, predictions = [], [], []
 
     with open(file_input) as f:
@@ -887,20 +891,20 @@ def parse_weka_output(file_input, ORIGINAL_IDENTIFIERS, SEQUENCES):
             if line.strip():
                 position = line.split()[0]
                 prediction = line.split()[2]
-                prob = float(line.split()[3])        
- 
+                prob = float(line.split()[3])
+
                 # WEKA output counts from position 1, our identifiers are counted from zero
                 identifier = ORIGINAL_IDENTIFIERS[int(position) - 1]
                 sequence = SEQUENCES[int(position) - 1]
 
-                if 'non-eff' in prediction:                               
+                if 'non-eff' in prediction:
                     noneffector = identifier.strip()
-                    noneffector = noneffector.replace('>', '')  
+                    noneffector = noneffector.replace('>', '')
                     predictions.append((noneffector, 'Non-effector', prob, sequence))
                     predicted_noneffectors.append((noneffector, prob, sequence))
-                else:                    
+                else:
                     effector = identifier.strip()
-                    effector = effector.replace('>', '')                                               
+                    effector = effector.replace('>', '')
                     predictions.append((effector, 'Effector', prob, sequence))
                     # Append predicted effector to list of predicted effectors
                     predicted_effectors.append((effector, prob, sequence))
@@ -909,11 +913,11 @@ def parse_weka_output(file_input, ORIGINAL_IDENTIFIERS, SEQUENCES):
 # -----------------------------------------------------------------------------------------------------------
 def short_output_screen(predictions, cyto_effectors, apo_effectors, cyto_apo_effectors, apo_cyto_effectors):
     """ Function: short_output_screen()
-        Purpose:  Given the WEKA predictions for each protein, write  
+        Purpose:  Given the WEKA predictions for each protein, write
                   string that contains the short output format.
-              
-        Input:    WEKA predictions for each protein.                  
-    
+
+        Input:    WEKA predictions for each protein.
+
         Return:   String that contains predictions for all proteins as tab-delimited table.
     """
     # Output predictions for all proteins as tab-delimited table
@@ -922,81 +926,81 @@ def short_output_screen(predictions, cyto_effectors, apo_effectors, cyto_apo_eff
     col_width = max(col_width, 10)
     pred_col_width = 20
 
-    short_output_string = "".join("# Identifier".ljust(col_width)) + '\t' 
-    short_output_string += "".join("Cytoplasmic effector".ljust(pred_col_width)) + '\t' 
-    short_output_string += "".join("Apoplastic effector".ljust(pred_col_width)) + '\t' 
-    short_output_string += "".join("Non-effector".ljust(pred_col_width)) + '\t' 
-    short_output_string += "".join("Prediction".ljust(pred_col_width)) + '\n' 
+    short_output_string = "".join("# Identifier".ljust(col_width)) + '\t'
+    short_output_string += "".join("Cytoplasmic effector".ljust(pred_col_width)) + '\t'
+    short_output_string += "".join("Apoplastic effector".ljust(pred_col_width)) + '\t'
+    short_output_string += "".join("Non-effector".ljust(pred_col_width)) + '\t'
+    short_output_string += "".join("Prediction".ljust(pred_col_width)) + '\n'
 
-    for index, (protein, pred, prob, sequence) in enumerate(predictions):    
+    for index, (protein, pred, prob, sequence) in enumerate(predictions):
 
         short_ident = 'protein' + str(index)
         if short_ident in cyto_effectors:
             short_output_string += "".join(protein.ljust(col_width)) + '\t' + 'Y' + ' (' + str(prob) + ')           ' + '\t' + "".join('-'.ljust(pred_col_width)) + '\t'
-            short_output_string += "".join('-'.ljust(pred_col_width)) + '\t' + 'Cytoplasmic effector' + '\n'            
+            short_output_string += "".join('-'.ljust(pred_col_width)) + '\t' + 'Cytoplasmic effector' + '\n'
         elif short_ident in apo_effectors:
-            short_output_string += "".join(protein.ljust(col_width)) + '\t' + "".join('-'.ljust(pred_col_width)) + '\t' + 'Y' + ' (' + str(prob) + ')           ' + '\t' 
-            short_output_string += "".join('-'.ljust(pred_col_width)) + '\t' + 'Apoplastic effector' + '\n'           
+            short_output_string += "".join(protein.ljust(col_width)) + '\t' + "".join('-'.ljust(pred_col_width)) + '\t' + 'Y' + ' (' + str(prob) + ')           ' + '\t'
+            short_output_string += "".join('-'.ljust(pred_col_width)) + '\t' + 'Apoplastic effector' + '\n'
         elif short_ident in cyto_apo_effectors:
-            short_output_string += "".join(protein.ljust(col_width)) + '\t' + 'Y' + ' (' + str(cyto_apo_effectors[short_ident][0])+ ')           ' + '\t' 
-            short_output_string += 'Y' + ' (' + str(cyto_apo_effectors[short_ident][1]) + ')           ' + '\t' + "".join('-'.ljust(pred_col_width)) + '\t' + 'Cytoplasmic/apoplastic effector' + '\n'  
+            short_output_string += "".join(protein.ljust(col_width)) + '\t' + 'Y' + ' (' + str(cyto_apo_effectors[short_ident][0])+ ')           ' + '\t'
+            short_output_string += 'Y' + ' (' + str(cyto_apo_effectors[short_ident][1]) + ')           ' + '\t' + "".join('-'.ljust(pred_col_width)) + '\t' + 'Cytoplasmic/apoplastic effector' + '\n'
         elif short_ident in apo_cyto_effectors:
-            short_output_string += "".join(protein.ljust(col_width)) + '\t' + 'Y' + ' (' + str(apo_cyto_effectors[short_ident][1])+ ')           ' + '\t' 
-            short_output_string += 'Y' + ' (' + str(apo_cyto_effectors[short_ident][0]) + ')           ' + '\t' + "".join('-'.ljust(pred_col_width)) + '\t' + 'Apoplastic/cytoplasmic effector' + '\n'  
+            short_output_string += "".join(protein.ljust(col_width)) + '\t' + 'Y' + ' (' + str(apo_cyto_effectors[short_ident][1])+ ')           ' + '\t'
+            short_output_string += 'Y' + ' (' + str(apo_cyto_effectors[short_ident][0]) + ')           ' + '\t' + "".join('-'.ljust(pred_col_width)) + '\t' + 'Apoplastic/cytoplasmic effector' + '\n'
         else:
-            short_output_string += "".join(protein.ljust(col_width)) + '\t' + "".join('-'.ljust(pred_col_width)) + '\t' + "".join('-'.ljust(pred_col_width)) + '\t' 
-            short_output_string += 'Y' + ' (' + str(prob) + ')           ' + '\t' + 'Non-effector' + '\n'  
+            short_output_string += "".join(protein.ljust(col_width)) + '\t' + "".join('-'.ljust(pred_col_width)) + '\t' + "".join('-'.ljust(pred_col_width)) + '\t'
+            short_output_string += 'Y' + ' (' + str(prob) + ')           ' + '\t' + 'Non-effector' + '\n'
 
 
     return short_output_string
 # -----------------------------------------------------------------------------------------------------------
 def short_output_file(predictions, cyto_effectors, apo_effectors, cyto_apo_effectors, apo_cyto_effectors):
     """ Function: short_output_file()
-        Purpose:  Given the WEKA predictions for each protein, write  
+        Purpose:  Given the WEKA predictions for each protein, write
                   string that contains the short output format.
-              
-        Input:    WEKA predictions for each protein.                  
-    
+
+        Input:    WEKA predictions for each protein.
+
         Return:   String that contains predictions for all proteins as tab-delimited table.
     """
     # Output predictions for all proteins as tab-delimited table
 
 
-    short_output_string = "# Identifier" + '\t' + "Cytoplasmic effector" + '\t' 
-    short_output_string += "Apoplastic effector" + '\t' 
-    short_output_string += "Non-effector" + '\t' 
-    short_output_string += "Prediction" + '\n' 
+    short_output_string = "# Identifier" + '\t' + "Cytoplasmic effector" + '\t'
+    short_output_string += "Apoplastic effector" + '\t'
+    short_output_string += "Non-effector" + '\t'
+    short_output_string += "Prediction" + '\n'
 
-    for index, (protein, pred, prob, sequence) in enumerate(predictions):    
+    for index, (protein, pred, prob, sequence) in enumerate(predictions):
 
         short_ident = 'protein' + str(index)
-        
+
         if short_ident in cyto_effectors:
             short_output_string += protein + '\t' + 'Y' + ' (' + str(prob) + ')' + '\t' + '-' + '\t'
-            short_output_string += '-' + '\t' + 'Cytoplasmic effector' + '\n'            
+            short_output_string += '-' + '\t' + 'Cytoplasmic effector' + '\n'
         elif short_ident in apo_effectors:
-            short_output_string += protein + '\t' + '-' + '\t' + 'Y' + ' (' + str(prob) + ')' + '\t' 
-            short_output_string += '-' + '\t' + 'Apoplastic effector' + '\n'           
+            short_output_string += protein + '\t' + '-' + '\t' + 'Y' + ' (' + str(prob) + ')' + '\t'
+            short_output_string += '-' + '\t' + 'Apoplastic effector' + '\n'
         elif short_ident in cyto_apo_effectors:
-            short_output_string += protein + '\t' + 'Y' + ' (' + str(cyto_apo_effectors[short_ident][0]) + ')' + '\t' 
-            short_output_string += 'Y' + ' (' + str(cyto_apo_effectors[short_ident][1]) + ')' + '\t' + '-' + '\t' + 'Cytoplasmic/apoplastic effector' + '\n'  
+            short_output_string += protein + '\t' + 'Y' + ' (' + str(cyto_apo_effectors[short_ident][0]) + ')' + '\t'
+            short_output_string += 'Y' + ' (' + str(cyto_apo_effectors[short_ident][1]) + ')' + '\t' + '-' + '\t' + 'Cytoplasmic/apoplastic effector' + '\n'
         elif short_ident in apo_cyto_effectors:
-            short_output_string += protein + '\t' + 'Y' + ' (' + str(apo_cyto_effectors[short_ident][1]) + ')' + '\t' 
-            short_output_string += 'Y' + ' (' + str(apo_cyto_effectors[short_ident][0]) + ')' + '\t' + '-' + '\t' + 'Apoplastic/cytoplasmic effector' + '\n'  
+            short_output_string += protein + '\t' + 'Y' + ' (' + str(apo_cyto_effectors[short_ident][1]) + ')' + '\t'
+            short_output_string += 'Y' + ' (' + str(apo_cyto_effectors[short_ident][0]) + ')' + '\t' + '-' + '\t' + 'Apoplastic/cytoplasmic effector' + '\n'
         else:
-            short_output_string += protein + '\t' + '-' + '\t' + '-' + '\t' 
-            short_output_string += 'Y' + ' (' + str(prob) + ')' + '\t' + 'Non-effector' + '\n'  
+            short_output_string += protein + '\t' + '-' + '\t' + '-' + '\t'
+            short_output_string += 'Y' + ' (' + str(prob) + ')' + '\t' + 'Non-effector' + '\n'
 
 
-    return short_output_string    
+    return short_output_string
 # -----------------------------------------------------------------------------------------------------------
 def long_output(ORIGINAL_IDENTIFIERS, predicted_effectors):
     """ Function: long_output()
-        Purpose:  Given the predicted effectors and identifiers for the test set,  
+        Purpose:  Given the predicted effectors and identifiers for the test set,
                   write string that contains the long output format.
-              
-        Input:    Predicted effectors and identifiers of test set.                  
-    
+
+        Input:    Predicted effectors and identifiers of test set.
+
         Return:   String that contains list of predicted effectors with posterior probabilites
                   and a short statistic on the percentage of predicted effectors in the test set.
     """
@@ -1007,10 +1011,10 @@ def long_output(ORIGINAL_IDENTIFIERS, predicted_effectors):
         long_output_string += effector + '| Effector probability:' + str(prob) + '\n'
 
     long_output_string += '-----------------\n\n'
-    long_output_string += 'Number of proteins that were tested: ' + str(len(ORIGINAL_IDENTIFIERS)) + '\n' 
-    long_output_string += 'Number of predicted effectors: ' + str(len(predicted_effectors)) + '\n' 
-    long_output_string += '\n' + '-----------------' + '\n' 
-    long_output_string += str(round(100.0*len(predicted_effectors)/len(ORIGINAL_IDENTIFIERS), 1)) + ' percent are predicted to be effectors.'  
+    long_output_string += 'Number of proteins that were tested: ' + str(len(ORIGINAL_IDENTIFIERS)) + '\n'
+    long_output_string += 'Number of predicted effectors: ' + str(len(predicted_effectors)) + '\n'
+    long_output_string += '\n' + '-----------------' + '\n'
+    long_output_string += str(round(100.0*len(predicted_effectors)/len(ORIGINAL_IDENTIFIERS), 1)) + ' percent are predicted to be effectors.'
     long_output_string += '\n' + '-----------------' + '\n'
 
     return long_output_string
