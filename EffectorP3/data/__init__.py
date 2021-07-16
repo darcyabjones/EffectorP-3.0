@@ -1,4 +1,21 @@
-from importlib.resources import path as resource_filename
+from importlib.resources import path
+
+
+def resource_filename(module, resource):
+    """ Emulates the behaviour of the old setuptools resource_filename command.
+    
+    Basically it just gets rid of the context manager thing, because it's not needed.
+    None of the files are zip files or create any temporary files that need to be
+    cleaned up.
+
+    This function would be unsafe to use with anything that will be extracted.
+    """
+
+    with path(module, resource) as handler:
+        filename = str(handler)
+
+    return filename
+
 
 WEKA_PATH = resource_filename(__name__ + ".weka384", 'weka.jar')
 FASTA_PATH = resource_filename(__name__, "Effectors.fasta")
