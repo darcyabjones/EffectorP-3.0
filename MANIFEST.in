@@ -1,7 +1,7 @@
-recursive-include EffectorP3 *.md
-recursive-include EffectorP3 *.txt
-recursive-include EffectorP3 *.jar
-recursive-include EffectorP3 *.fasta
-recursive-include EffectorP3 *.arff
-recursive-include EffectorP3 *.txt
-recursive-include EffectorP3 *.model
+recursive-include EP3 *.md
+recursive-include EP3 *.txt
+recursive-include EP3 *.jar
+recursive-include EP3 *.fasta
+recursive-include EP3 *.arff
+recursive-include EP3 *.txt
+recursive-include EP3 *.model
