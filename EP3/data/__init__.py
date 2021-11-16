@@ -1,9 +1,12 @@
-from importlib.resources import path
+try:
+    from importlib.resources import path
+except ImportError:
+    from importlib_resources import path
 
 
 def resource_filename(module, resource):
     """ Emulates the behaviour of the old setuptools resource_filename command.
-    
+
     Basically it just gets rid of the context manager thing, because it's not needed.
     None of the files are zip files or create any temporary files that need to be
     cleaned up.
